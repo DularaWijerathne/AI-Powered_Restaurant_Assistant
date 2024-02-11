@@ -1,5 +1,4 @@
 import numpy as np
-import random
 import json
 from text_preprocessor import tokenize, lemmatize, bag_of_words
 from tensorflow.keras.models import Sequential
@@ -31,29 +30,32 @@ unique_tokens = sorted(set(lemmatized_tokens))  # remove duplicates from tokens
 training_data = []
 
 for (tag, pattern_sentence) in tags_with_tokens:
-    label = tags.index(tag)
+    tag_label = np.zeros(len(unique_tags))
+    tag_label[unique_tags.index(tag)] = 1
 
     lemmatized_pattern_sentence = [lemmatize(i) for i in pattern_sentence]
     bag = bag_of_words(lemmatized_pattern_sentence, unique_tokens)
 
-    training_data.append(np.concatenate(([label], bag)))
+    training_data.append(np.concatenate([tag_label, bag]))
 
 training_data = np.array(training_data)
 np.random.seed(12)  # set a fixed random value
 np.random.shuffle(training_data)
 
-X_train = training_data[:, 1:]
-y_train = training_data[:, 0]
+X_train = training_data[:, 6:]
+y_train = training_data[:, :6]
 
 model = Sequential()
-model.add(Dense(128, input_shape=len(unique_tokens), activation='relu'))
+model.add(Dense(128, input_shape=(len(unique_tokens),), activation='relu'))
 model.add(Dropout(0.5))
+model.add(Dense(68, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(len(unique_tags), activation='softmax'))
 
+sgd = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
+model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
-print(training_data)
-print(y_train)
-print(X_train)
+model.fit(X_train, y_train, epochs=1000, batch_size=8, verbose=1)
+model.save('chatbot_model')
 
-
-print(len(X_train[0]))
-print(len(unique_tokens))
+print('Training is done')
