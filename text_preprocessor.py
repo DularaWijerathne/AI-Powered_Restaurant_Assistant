@@ -21,7 +21,7 @@ def bag_of_words(tokenized_sentence, all_words):
     bag = np.zeros(len(all_words))
     for (index, word) in enumerate(all_words):
         if word in tokenized_sentence:
-            bag[index] = 1.0
+            bag[index] = 1
 
     return bag
 
