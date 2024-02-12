@@ -28,8 +28,8 @@ lemmatized_tokens = [lemmatize(i) for i in tokens if i not in ignore_characters]
 unique_tags = sorted(set(tags))  # remove duplicates from tags
 unique_tokens = sorted(set(lemmatized_tokens))  # remove duplicates from tokens
 
-pickle.dump(unique_tags, open('tags', 'wb'))
-pickle.dump(unique_tokens, open('tokens', 'wb'))
+pickle.dump(unique_tags, open('tags.pkl', 'wb'))
+pickle.dump(unique_tokens, open('tokens.pkl', 'wb'))
 
 training_data = []
 
@@ -60,6 +60,9 @@ sgd = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
 model.fit(X_train, y_train, epochs=1000, batch_size=8, verbose=1)
-model.save('chatbot_model')
+# model.save('chatbot_model')
+
+with open('chatbot_model.pkl', 'wb') as f:
+    pickle.dump(model, f)
 
 print('Training is done')

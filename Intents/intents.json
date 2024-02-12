@@ -16,11 +16,11 @@
         },
         {"tag": "name",
          "patterns": ["what is your name", "what should I call you", "whats your name?"],
-         "responses": ["You can call me Tim.", "I'm Tim!", "I'm Tim aka Tech With Tim."],
+         "responses": ["You can call me Chatbot.", "I'm Chatbot!"],
          "context_set": ""
         },
         {"tag": "shop",
-         "patterns": ["Id like to buy something", "whats on the menu", "what do you reccommend?", "could i get something to eat"],
+         "patterns": ["Id like to buy something", "whats on the menu", "what do you recommend?", "could i get something to eat, what do you sell?"],
          "responses": ["We sell chocolate chip cookies for $2!", "Cookies are on the menu!"],
          "context_set": ""
         },
