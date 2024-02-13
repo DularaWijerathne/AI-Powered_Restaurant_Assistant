@@ -43,11 +43,10 @@ for (tag, pattern_sentence) in tags_with_tokens:
     training_data.append(np.concatenate([tag_label, bag]))
 
 training_data = np.array(training_data)
-np.random.seed(12)  # set a fixed random value
 np.random.shuffle(training_data)
 
-X_train = training_data[:, 6:]
-y_train = training_data[:, :6]
+X_train = training_data[:, len(unique_tags):]
+y_train = training_data[:, :len(unique_tags)]
 
 model = Sequential()
 model.add(Dense(128, input_shape=(len(unique_tokens),), activation='relu'))
@@ -60,7 +59,6 @@ sgd = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
 model.fit(X_train, y_train, epochs=1000, batch_size=8, verbose=1)
-# model.save('chatbot_model')
 
 with open('chatbot_model.pkl', 'wb') as f:
     pickle.dump(model, f)

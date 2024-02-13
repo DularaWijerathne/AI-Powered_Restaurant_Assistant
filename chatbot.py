@@ -21,9 +21,7 @@ def predict_class(sentence):
 
     likelihoods = model.predict(np.array([token_bag]))[0]  # output is given as a 2D array. use [0] to return a 1D array
 
-    ERROR_THRESHOLD = 0.3
-
-    results = [[i, r] for i, r in enumerate(likelihoods) if r > ERROR_THRESHOLD]
+    results = [[i, r] for i, r in enumerate(likelihoods)]
     results.sort(key=lambda x: x[1], reverse=True)
 
     return_list = [{'intent': tags[i[0]], 'probability': i[1]} for i in results]
@@ -32,12 +30,19 @@ def predict_class(sentence):
 
 
 def get_response(sentence, intents_json):
-    intent = predict_class(sentence)[0]['intent']
+    THRESHOLD = 0.8
     intents_list = intents_json['intents']
-    for i in intents_list:
-        if i['tag'] == intent:
-            response = random.choice(i['responses'])
-            break
+    intent_probabilities = predict_class(sentence)[0]
+    response = ''
+
+    if intent_probabilities['probability'] > THRESHOLD:
+        for i in intents_list:
+            if i['tag'] == intent_probabilities['intent']:
+                response = random.choice(i['responses'])
+                break
+    else:
+        response = "Sorry, I can't understand"
+
     return response
 
 
