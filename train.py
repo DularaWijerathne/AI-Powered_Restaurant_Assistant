@@ -42,6 +42,8 @@ for (tag, pattern_sentence) in tags_with_tokens:
 
     training_data.append(np.concatenate([tag_label, bag]))
 
+np.random.seed(42)
+
 training_data = np.array(training_data)
 np.random.shuffle(training_data)
 
