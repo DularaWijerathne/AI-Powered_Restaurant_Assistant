@@ -3,8 +3,7 @@ import random
 import json
 import numpy as np
 from nltk.tokenize import word_tokenize
-
-from text_preprocessor import tokenize, lemmatize, bag_of_words
+from text_preprocessor import lemmatize, bag_of_words
 
 with open('Intents/intents.json') as f:
     intents_json = json.load(f)
